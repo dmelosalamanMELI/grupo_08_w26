@@ -26,4 +26,9 @@ public class UserRepository implements IUserRepository{
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
         userList = users;
     }
+
+    @Override
+    public Boolean existsUserById(Integer userId) {
+        return userList.stream().anyMatch(user -> user.getUser_id().equals(userId));
+    }
 }

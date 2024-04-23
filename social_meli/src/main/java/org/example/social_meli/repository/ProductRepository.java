@@ -22,8 +22,19 @@ public class ProductRepository implements IProductRepository{
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         List<Post> posts ;
-        file= ResourceUtils.getFile("classpath:post.json");
+        file= ResourceUtils.getFile("classpath:posts.json");
         posts= objectMapper.readValue(file,new TypeReference<List<Post>>(){});
         postList = posts;
+    }
+
+    @Override
+    public Post savePost(Post post) {
+        postList.add(post);
+        return post;
+    }
+
+    @Override
+    public Boolean existsPost(Integer postId) {
+        return postList.stream().anyMatch(post -> post.getPost_id().equals(postId));
     }
 }
