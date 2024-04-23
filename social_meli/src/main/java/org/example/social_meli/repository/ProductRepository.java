@@ -22,7 +22,7 @@ public class ProductRepository implements IProductRepository{
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         List<Post> posts ;
-        file= ResourceUtils.getFile("classpath:post.json");
+        file= ResourceUtils.getFile("classpath:posts.json");
         posts= objectMapper.readValue(file,new TypeReference<List<Post>>(){});
         postList = posts;
     }
