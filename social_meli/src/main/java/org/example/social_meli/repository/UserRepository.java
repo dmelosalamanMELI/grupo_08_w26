@@ -14,6 +14,10 @@ public class UserRepository implements IUserRepository{
 
     private List<User> userList;
 
+    public UserRepository() throws IOException {
+        loadDataBase();
+    }
+
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();

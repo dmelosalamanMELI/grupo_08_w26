@@ -14,6 +14,10 @@ import java.util.List;
 public class ProductRepository implements IProductRepository{
     private List<Post> postList;
 
+    public ProductRepository() throws IOException {
+        this.loadDataBase();
+    }
+
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
