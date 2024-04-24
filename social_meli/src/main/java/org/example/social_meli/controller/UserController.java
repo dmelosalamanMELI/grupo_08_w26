@@ -20,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("{userId}/followes/count/")
+    @GetMapping("{userId}/followers/count/")
     @ResponseBody
     public ResponseEntity<UserCountResponseDTO> countUserFollowers(@PathVariable Integer userId){
         return new ResponseEntity<>(userService.countFollowers(userId), HttpStatus.OK);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import lombok.Getter;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,8 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+@Getter
 @Repository
 public class UserRepository implements IUserRepository{
 
@@ -39,5 +42,18 @@ public class UserRepository implements IUserRepository{
         file= ResourceUtils.getFile("classpath:sellers.json");
         sellers= objectMapper.readValue(file,new TypeReference<List<FollowerList>>(){});
         sellerList = sellers;
+    }
+
+    @Override
+    public int countFollowers(Integer userId) {
+        int counter = 0;
+
+        for (FollowerList fl: sellerList){
+            if (fl.getUser().getUser_id().equals(userId)){
+                counter = fl.getFollower().size();
+            }
+        }
+
+        return counter;
     }
 }
