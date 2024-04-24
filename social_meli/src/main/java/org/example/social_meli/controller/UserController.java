@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    UserServiceImpl userService;
+    IUserService userService;
 
     @GetMapping("{userId}/followers/count/")
     @ResponseBody
