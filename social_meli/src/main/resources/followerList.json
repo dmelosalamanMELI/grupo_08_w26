@@ -1,0 +1,16 @@
+[
+  {
+    "user": {
+      "user_id": 1,
+      "user_name": "sellerUser",
+      "isSeller": true
+    },
+    "followers": [
+      {
+        "user_id": 2,
+        "user_name": "followerUser",
+        "isSeller": false
+      }
+    ]
+  }
+]

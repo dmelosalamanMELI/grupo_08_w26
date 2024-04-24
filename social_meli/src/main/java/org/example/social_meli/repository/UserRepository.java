@@ -17,7 +17,14 @@ public class UserRepository implements IUserRepository{
     public UserRepository() throws IOException {
         loadDataBase();
     }
-
+    @Override
+    public User findById(Integer user_id){
+        return userList.stream().filter(v->v.getUser_id().equals(user_id)).findFirst().orElse(null);
+    }
+    @Override
+    public boolean existsById(Integer user_Id) {
+        return userList.stream().anyMatch(user -> user.getUser_id().equals(user_Id));
+    }
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();

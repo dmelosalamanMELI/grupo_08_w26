@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
     IUserService userService;
+
+    @PostMapping("/{userId}/follow/{userIdToFollow}")
+    public ResponseEntity<?> followUser(@PathVariable Integer userId, @PathVariable Integer userIdToFollow) {
+        userService.followUser(userId, userIdToFollow);
+        return new ResponseEntity<>("Usuario creado",HttpStatus.OK);
+    }
 }
+
+
