@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IUserRepository {
+
     User findById(Integer user_id);
     Boolean existsById(Integer user_Id);
     Boolean existsClientById(Integer clientId);
@@ -23,6 +24,7 @@ public interface IUserRepository {
 
     int countFollowers(Integer userId);
 
+    List<FollowerList> getAllSellers();
 
 
 
