@@ -1,19 +1,14 @@
 package org.example.social_meli.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.example.social_meli.model.User;
 
 import java.util.*;
-
-
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-
+@AllArgsConstructor
 public class UserResponseDTO {
     private Integer user_id;
     private String user_name;
