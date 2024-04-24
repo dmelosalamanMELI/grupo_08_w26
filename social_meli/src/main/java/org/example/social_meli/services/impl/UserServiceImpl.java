@@ -2,20 +2,15 @@ package org.example.social_meli.services.impl;
 import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
-import org.example.social_meli.repository.FollowerListRepository;
-import org.example.social_meli.repository.UserRepository;
+import org.example.social_meli.repository.IUserRepository;
 import org.example.social_meli.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 @Service
 public class UserServiceImpl implements IUserService {
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private FollowerListRepository followerListRepository; // Asegúrate que el nombre de la clase y del importe sean correctos
+    private IUserRepository userRepository;
 
     @Override
     public void followUser(Integer user_id, Integer user_id_to_follow) {
@@ -37,12 +32,18 @@ public class UserServiceImpl implements IUserService {
             if (user.getIsSeller()) {
                 throw new BadRequestException("El usuario es vendedor y no puede seguir.");
             }
-            FollowerList followerList = followerListRepository.findByUser(userToFollow);
-            if(followerList == null){
-                followerList = new FollowerList(userToFollow);
+            FollowerList seller = userRepository.findSellerByUser(userToFollow);
+            if(seller == null){
+                seller = new FollowerList(userToFollow);
             }
-            followerList.getFollower().add(user);
-            followerListRepository.save(followerList);
+            FollowerList client = userRepository.findClientByUser(user);
+            if(client == null){
+                client = new FollowerList(user);
+            }
+            client.getFollower().add(userToFollow);
+            seller.getFollower().add(user);
+            userRepository.saveSeller(seller);
+            userRepository.saveClient(client);
         }
     }
 }

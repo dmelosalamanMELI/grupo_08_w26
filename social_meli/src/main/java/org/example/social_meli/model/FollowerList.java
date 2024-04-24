@@ -12,7 +12,6 @@ import java.util.*;
 @Data
 public class FollowerList {
     private User user;
-    @JsonProperty("followers")
     private List<User> follower;
     public FollowerList(User user) {
         this.user = user;
