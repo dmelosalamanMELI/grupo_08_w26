@@ -1,0 +1,21 @@
+[
+  {
+    "user": {
+      "user_id": 2,
+      "user_name": "dclail1",
+      "isSeller": true
+    },
+    "follower": [
+      {
+        "user_id": 3,
+        "user_name": "ceverett2",
+        "isSeller": false
+      },
+      {
+        "user_id": 1,
+        "user_name": "wcalderwood0",
+        "isSeller": false
+      }
+    ]
+  }
+]
