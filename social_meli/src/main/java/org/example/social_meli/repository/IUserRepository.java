@@ -5,6 +5,9 @@ import org.example.social_meli.model.FollowerList;
 import java.util.List;
 
 public interface IUserRepository {
-    List<FollowerList> getFollowerListByUserId(Integer userId);
+    FollowerList getFollowerByUserId(Integer userId);
+    String getUsernameById(Integer userId);
+
+    Boolean existById(Integer userId);
 
 }

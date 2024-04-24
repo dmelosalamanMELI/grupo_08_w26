@@ -5,5 +5,5 @@ import org.example.social_meli.dto.UserResponseDTO;
 import java.util.List;
 
 public interface IUserService {
-    List<UserResponseDTO> getFollowers(Integer userId);
+    UserResponseDTO getFollowers(Integer userId);
 }

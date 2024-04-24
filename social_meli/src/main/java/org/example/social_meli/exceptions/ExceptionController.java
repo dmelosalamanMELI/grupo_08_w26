@@ -14,4 +14,10 @@ public class ExceptionController {
         ExceptionDTO exception = new ExceptionDTO(ex.getMessage());
         return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    private ResponseEntity<?> notFoundExceptionException(NotFoundException ex){
+        ExceptionDTO exception = new ExceptionDTO(ex.getMessage());
+        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    }
 }

@@ -14,6 +14,8 @@ import java.util.List;
 public class UserRepository implements IUserRepository{
 
     private List<User> userList;
+    private List<FollowerList> sellerList;
+    private List<FollowerList> clientList;
     private List<FollowerList> followerList;
 
     public UserRepository() throws IOException {
@@ -33,7 +35,19 @@ public class UserRepository implements IUserRepository{
         followerList = followerLists;
     }
 
-    public List<FollowerList> getFollowerListByUserId(Integer userId) {
-        return followerList.stream().filter(followerList -> followerList.getUser().getUser_id().equals(userId)).toList();
+
+
+    public FollowerList getFollowerByUserId(Integer userId) {
+        return followerList.stream().filter(follower -> follower.getUser().getUser_id().equals(userId)).findFirst().orElseThrow();
+    }
+
+    @Override
+    public String getUsernameById(Integer userId) {
+        return userList.stream().filter(user -> user.getUser_id().equals(userId)).findFirst().orElseThrow().getUser_name();
+    }
+
+    @Override
+    public Boolean existById(Integer userId) {
+        return userList.stream().anyMatch(user -> user.getUser_id().equals(userId));
     }
 }
