@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.social_meli.model.User;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.*;
 @Data
@@ -12,5 +13,5 @@ import java.util.*;
 public class UserResponseDTO {
     private Integer user_id;
     private String user_name;
-    private List<User> followers;
+    private List<UserDTO> followers;
 }

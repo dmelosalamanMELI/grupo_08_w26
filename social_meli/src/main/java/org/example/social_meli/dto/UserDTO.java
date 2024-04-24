@@ -1,17 +1,15 @@
-package org.example.social_meli.model;
-
+package org.example.social_meli.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class UserDTO {
     private Integer user_id;
     private String user_name;
-    private Boolean isSeller;
 }

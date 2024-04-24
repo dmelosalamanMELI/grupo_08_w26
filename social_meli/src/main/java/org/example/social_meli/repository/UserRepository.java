@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
+import org.example.social_meli.utils.Mapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -24,6 +25,7 @@ public class UserRepository implements IUserRepository{
     }
 
 
+
     private void loadDataBase() throws IOException {
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -39,5 +41,10 @@ public class UserRepository implements IUserRepository{
         file= ResourceUtils.getFile("classpath:sellers.json");
         sellers= objectMapper.readValue(file,new TypeReference<List<FollowerList>>(){});
         sellerList = sellers;
+    }
+
+    @Override
+    public FollowerList findUserById(Integer id) {
+        return clientList.stream().filter(client-> client.getUser().getUser_id().equals(id)).findFirst().orElse(null);
     }
 }
