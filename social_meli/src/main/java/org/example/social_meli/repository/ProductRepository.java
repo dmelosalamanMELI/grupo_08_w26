@@ -27,9 +27,21 @@ public class ProductRepository implements IProductRepository{
         postList = posts;
     }
 
+    private void saveDataBase() throws IOException {
+        File file;
+        ObjectMapper objectMapper = new ObjectMapper();
+        file = ResourceUtils.getFile("classpath:posts.json");
+        objectMapper.writeValue(file, postList);
+    }
+
     @Override
     public Post savePost(Post post) {
         postList.add(post);
+        try {
+            saveDataBase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return post;
     }
 
