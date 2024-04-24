@@ -11,4 +11,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     IUserService userService;
+
+    @GetMapping("{userId}/followers/list")
+    public ResponseEntity<?> getFollowers(@PathVariable Integer userId) {
+        return new ResponseEntity<>(userService.getFollowers(userId), HttpStatus.OK);
+    }
 }

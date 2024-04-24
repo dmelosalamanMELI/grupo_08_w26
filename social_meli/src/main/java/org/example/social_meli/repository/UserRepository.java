@@ -2,6 +2,7 @@ package org.example.social_meli.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
@@ -13,6 +14,7 @@ import java.util.List;
 public class UserRepository implements IUserRepository{
 
     private List<User> userList;
+    private List<FollowerList> followerList;
 
     public UserRepository() throws IOException {
         loadDataBase();
@@ -25,5 +27,13 @@ public class UserRepository implements IUserRepository{
         file= ResourceUtils.getFile("classpath:users.json");
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
         userList = users;
+        List<FollowerList> followerLists;
+        file= ResourceUtils.getFile("classpath:followerList.json");
+        followerLists= objectMapper.readValue(file,new TypeReference<List<FollowerList>>(){});
+        followerList = followerLists;
+    }
+
+    public List<FollowerList> getFollowerListByUserId(Integer userId) {
+        return followerList.stream().filter(followerList -> followerList.getUser().getUser_id().equals(userId)).toList();
     }
 }
