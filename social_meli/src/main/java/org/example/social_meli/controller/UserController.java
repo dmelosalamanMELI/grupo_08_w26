@@ -1,5 +1,6 @@
 package org.example.social_meli.controller;
 
+import org.example.social_meli.dto.UserCountResponseDTO;
 import org.example.social_meli.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
