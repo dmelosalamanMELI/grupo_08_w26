@@ -1,16 +1,15 @@
 package org.example.social_meli.services.impl;
 
 import org.example.social_meli.dto.UserCountResponseDTO;
-import org.example.social_meli.dto.UserResponseDTO;
-import org.example.social_meli.repository.UserRepository;
+import org.example.social_meli.repository.impl.UserRepository;
 import org.example.social_meli.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements IUserService {
-
-    private final UserRepository userRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository){
