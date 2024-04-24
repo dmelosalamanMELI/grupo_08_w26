@@ -40,4 +40,41 @@ public class UserRepository implements IUserRepository{
         sellers= objectMapper.readValue(file,new TypeReference<List<FollowerList>>(){});
         sellerList = sellers;
     }
+
+    @Override
+    public FollowerList findSellerById(Integer id) {
+        return sellerList.stream()
+                .filter(seller ->
+                        seller.getUser().getUser_id().equals(id))
+                .findFirst().orElse(null);
+    }
+
+    @Override
+    public FollowerList findClientById(Integer id) {
+        return clientList.stream()
+                .filter(client ->
+                        client.getUser().getUser_id().equals(id))
+                .findFirst().orElse(null);
+    }
+
+
+    @Override
+    public Integer getClientIndex(FollowerList client) {
+        return this.clientList.indexOf(client);
+    }
+
+    @Override
+    public Integer getSellerIndex(FollowerList seller) {
+        return this.sellerList.indexOf(seller);
+    }
+
+    @Override
+    public void updateClients(Integer index, FollowerList client) {
+        this.clientList.set(index,client);
+    }
+
+    @Override
+    public void updateSellers(Integer index, FollowerList seller) {
+        this.sellerList.set(index,seller);
+    }
 }

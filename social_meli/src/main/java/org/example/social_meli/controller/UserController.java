@@ -11,4 +11,8 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     IUserService userService;
+    @PostMapping("{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity<?> postUnfollowUser(@PathVariable Integer userId,@PathVariable Integer userIdToUnfollow){
+        return new ResponseEntity<>(userService.unfollowUser(userId, userIdToUnfollow),HttpStatus.OK);
+    }
 }
