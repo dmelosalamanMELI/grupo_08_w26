@@ -1,8 +1,38 @@
 [
     {
-        "user_id": 45,
+        "user_id": 2,
+        "post_id": 16,
+        "date": "05-04-2024",
+        "product": {
+            "product_id": 62,
+            "product_name": "Headset RGB Inalámbrico",
+            "type": "Gamer",
+            "brand": "Razer",
+            "color": "Green with RGB",
+            "notes": "Sin Batería"
+        },
+        "category": 120,
+        "price": 2800.69
+    },
+    {
+        "user_id": 2,
+        "post_id": 30,
+        "date": "20-04-2024",
+        "product": {
+            "product_id": 62,
+            "product_name": "Headset RGB Inalámbrico",
+            "type": "Gamer",
+            "brand": "Razer",
+            "color": "Green with RGB",
+            "notes": "Sin Batería"
+        },
+        "category": 120,
+        "price": 2800.69
+    },
+    {
+        "user_id": 2,
         "post_id": 1,
-        "date": "01-05-2021",
+        "date": "24-04-2024",
         "product": {
             "product_id": 62,
             "product_name": "Headset RGB Inalámbrico",

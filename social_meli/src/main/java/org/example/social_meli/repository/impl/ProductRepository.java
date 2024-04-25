@@ -71,4 +71,9 @@ public class ProductRepository implements IProductRepository {
     public Boolean existsPost(Integer postId) {
         return postList.stream().anyMatch(post -> post.getPost_id().equals(postId));
     }
+
+    @Override
+    public List<Post> getAllPosts() {
+        return postList;
+    }
 }
