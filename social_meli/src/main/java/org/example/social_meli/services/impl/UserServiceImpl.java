@@ -25,7 +25,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserResponseDTO getFollowedById(Integer userId) {
         if (!userRepository.existsClientById(userId)) {
-            System.out.println("entro en alaaaaaaaaaa");
             throw new NotFoundException("No existe el usuario " + userId);
         }
         ObjectMapper mapper = new ObjectMapper();

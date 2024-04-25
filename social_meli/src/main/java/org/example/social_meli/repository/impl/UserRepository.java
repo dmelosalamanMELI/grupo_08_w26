@@ -58,20 +58,20 @@ public class UserRepository implements IUserRepository {
         if(existsSellerById(seller.getUser().getUser_id())){
             index=sellerList.indexOf(findSellerByUser(seller.getUser()));
             this.sellerList.set(index,seller);
-            return;
+        }else {
+            this.sellerList.add(seller);
         }
-        this.sellerList.add(seller);
     }
 
     @Override
     public void saveClient(FollowerList client) {
         Integer index = -1;
         if (existsClientById(client.getUser().getUser_id())){
-            index=clientList.indexOf(findSellerByUser(client.getUser()));
+            index=clientList.indexOf(findClientByUser(client.getUser()));
             this.clientList.set(index,client);
-            return;
+        }else {
+            this.clientList.add(client);
         }
-        this.clientList.add(client);
     }
 
     private void loadDataBase() throws IOException {
