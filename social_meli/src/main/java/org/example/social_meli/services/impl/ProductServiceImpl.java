@@ -26,7 +26,7 @@ public class ProductServiceImpl implements IProductService {
         if (productRepository.existsPost(postDTO.getPost_id())) {
             throw new ConflictException("Ya existe un post con el id " + postDTO.getPost_id());
         }
-        if (!userRepository.existsUserById(postDTO.getUser_id())) {
+        if (!userRepository.existsSellerById(postDTO.getUser_id())) {
             throw new NotFoundException("No existe un usuario con el id " + postDTO.getUser_id());
         }
         productRepository.savePost(mapper.map(postDTO, Post.class));

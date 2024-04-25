@@ -1,15 +1,18 @@
 package org.example.social_meli.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.*;
-@Data
-@NoArgsConstructor
+@Setter
+@Getter
 @AllArgsConstructor
-public class UserResponseDTO {
+@NoArgsConstructor
+public class UserCountResponseDTO {
+
     private Integer user_id;
     private String user_name;
-    private List<UserDTO> follower;
+    private Integer followers_count;
+
 }
