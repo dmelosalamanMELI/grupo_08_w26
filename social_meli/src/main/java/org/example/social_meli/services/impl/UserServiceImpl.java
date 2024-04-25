@@ -3,13 +3,9 @@ package org.example.social_meli.services.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.social_meli.dto.UserDTO;
 import org.example.social_meli.dto.UserResponseDTO;
-import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.repository.IUserRepository;
-import org.example.social_meli.repository.UserRepository;
 import org.example.social_meli.services.IUserService;
-import org.example.social_meli.utils.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
