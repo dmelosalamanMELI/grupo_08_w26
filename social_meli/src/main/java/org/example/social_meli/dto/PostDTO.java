@@ -1,15 +1,17 @@
-package org.example.social_meli.model;
+package org.example.social_meli.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Post {
+public class PostDTO {
     private Integer post_id;
     private Integer user_id;
     private String date;
-    private Product product;
+    private ProductDTO product;
     private Integer category;
     private Double price;
 }
