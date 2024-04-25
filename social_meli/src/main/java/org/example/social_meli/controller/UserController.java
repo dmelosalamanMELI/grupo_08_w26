@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<?> followUser(@PathVariable Integer userId, @PathVariable Integer userIdToFollow) {
         userService.followUser(userId, userIdToFollow);
-        return new ResponseEntity<>("Usuario creado",HttpStatus.OK);
+        return new ResponseEntity<>("Vendedor seguido :v",HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followers/count/")

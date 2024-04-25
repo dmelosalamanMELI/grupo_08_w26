@@ -1,7 +1,13 @@
 package org.example.social_meli.repository;
 
 import org.example.social_meli.model.FollowerList;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.social_meli.model.FollowerList;
+import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
+import org.springframework.util.ResourceUtils;
+
 import java.util.List;
 
 public interface IUserRepository {

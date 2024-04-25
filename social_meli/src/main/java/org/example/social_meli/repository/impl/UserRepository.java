@@ -2,7 +2,6 @@ package org.example.social_meli.repository.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
@@ -54,11 +53,10 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public void saveSeller(FollowerList seller) {
-        Integer index=-1;
-        if(existsSellerById(seller.getUser().getUser_id())){
-            index=sellerList.indexOf(findSellerByUser(seller.getUser()));
-            this.sellerList.set(index,seller);
-        }else {
+        Integer index = -1;
+        if (existsSellerById(seller.getUser().getUser_id())) {
+            index = sellerList.indexOf(findSellerByUser(seller.getUser()));
+            this.sellerList.set(index, seller);
             this.sellerList.add(seller);
         }
     }
