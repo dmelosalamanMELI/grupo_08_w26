@@ -2,16 +2,15 @@ package org.example.social_meli.services.impl;
 
 import org.example.social_meli.dto.FollowListDTO;
 import org.example.social_meli.dto.PostDTO;
-import org.example.social_meli.dto.UserDTO;
 import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.exceptions.ConflictException;
 import org.example.social_meli.exceptions.NotFoundException;
-import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.Post;
 import org.example.social_meli.repository.IProductRepository;
 import org.example.social_meli.repository.IUserRepository;
 import org.example.social_meli.services.IProductService;
+import org.example.social_meli.services.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,18 +19,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements IProductService {
 
     @Autowired
-    private IProductRepository productRepository;
+    IProductRepository productRepository;
 
     @Autowired
-    private IUserRepository userRepository;
+    IUserRepository userRepository;
+
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    IUserService userServiceImpl;
+
+    @Override
+    public List<PostDTO> getAllPosts() {
+        ModelMapper mapper = new ModelMapper();
+        return productRepository.getAllPosts().stream().map(post -> mapper.map(post, PostDTO.class)).toList();
+    }
 
     @Override
     public PostDTO savePost(PostDTO postDTO) {
@@ -44,12 +49,6 @@ public class ProductServiceImpl implements IProductService {
         }
         productRepository.savePost(mapper.map(postDTO, Post.class));
         return postDTO;
-    }
-
-    @Override
-    public List<PostDTO> getAllPosts() {
-        ModelMapper mapper = new ModelMapper();
-        return productRepository.getAllPosts().stream().map(post -> mapper.map(post, PostDTO.class)).toList();
     }
 
     @Override

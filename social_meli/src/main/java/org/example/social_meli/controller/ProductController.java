@@ -15,7 +15,7 @@ public class ProductController {
     IProductService productService;
 
     @PostMapping("/post")
-    public ResponseEntity<?> postPost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<?> postProductPost(@RequestBody PostDTO postDTO) {
         return new ResponseEntity<>(productService.savePost(postDTO), HttpStatus.OK);
     }
 

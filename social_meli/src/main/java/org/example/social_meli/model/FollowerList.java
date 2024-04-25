@@ -1,5 +1,4 @@
 package org.example.social_meli.model;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
