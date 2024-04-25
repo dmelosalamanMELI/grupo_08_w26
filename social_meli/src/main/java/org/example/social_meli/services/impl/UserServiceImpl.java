@@ -7,18 +7,13 @@ import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
 import org.example.social_meli.exceptions.BadRequestException;
-import org.example.social_meli.model.FollowerList;
-import org.example.social_meli.model.User;
-import org.example.social_meli.repository.IUserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.social_meli.dto.UserDTO;
-import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.dto.UserCountResponseDTO;
 import org.example.social_meli.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +45,36 @@ public class UserServiceImpl implements IUserService {
                         mapper.convertValue(follower, UserDTO.class))
                 .toList());
         return responseDTO;
+    }
+
+    @Override
+    public UserResponseDTO getOrderedFollowedById(Integer id, String orderBy) {
+        UserResponseDTO response = getFollowedById(id);
+        return orderFollowerList(response,orderBy);
+    }
+    @Override
+    public UserResponseDTO getOrderedFollowersById(Integer id, String orderBy) {
+        UserResponseDTO response = getFollowers(id);
+        return orderFollowerList(response,orderBy);
+    }
+
+    private UserResponseDTO orderFollowerList(UserResponseDTO response, String orderBy){
+        if (!orderBy.equals("name_asc") && !orderBy.equals("name_desc"))
+            throw new BadRequestException("El parametro de ordenamiento no es valido");
+        return (orderBy.equals("name_asc")?
+                orderFollowersAsc(response):
+                orderFollowersDesc(response));
+    }
+    private UserResponseDTO orderFollowersAsc(UserResponseDTO user){
+        user.setFollower(user.getFollower()
+                .stream()
+                .sorted(Comparator.comparing(UserDTO::getUser_name))
+                .toList());
+        return user;
+    }
+    private UserResponseDTO orderFollowersDesc(UserResponseDTO user){
+        user.setFollower(user.getFollower().stream().sorted(Comparator.comparing(UserDTO::getUser_name).reversed()).toList());
+        return user;
     }
 
     @Override

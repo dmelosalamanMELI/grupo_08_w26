@@ -10,16 +10,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     @Autowired
     IUserService userService;
+
     @PostMapping("{userId}/unfollow/{userIdToUnfollow}")
     public ResponseEntity<?> postUnfollowUser(@PathVariable Integer userId,@PathVariable Integer userIdToUnfollow){
         return new ResponseEntity<>(userService.unfollowUser(userId, userIdToUnfollow),HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/followed/list")
+    @GetMapping(value = "/{userId}/followed/list")
     public ResponseEntity<?> getFollowedUsers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getFollowedById(userId), HttpStatus.OK);
+    }
+
+    @GetMapping( value = "/{userId}/followed/list",params = "order")
+    public ResponseEntity<?> getOrderFollowedUsers(@PathVariable("userId") Integer userId, @RequestParam (value ="order", required = false) String order) {
+        return new ResponseEntity<>(userService.getOrderedFollowedById(userId,order), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/follow/{userIdToFollow}")
@@ -34,8 +41,13 @@ public class UserController {
         return new ResponseEntity<>(userService.countFollowers(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<?> getFollowers(@PathVariable Integer userId) {
+    @GetMapping(value =  "/{userId}/followers/list")
+    public ResponseEntity<?> getFollowers(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getFollowers(userId), HttpStatus.OK);
+    }
+
+    @GetMapping(value="/{userId}/followers/list",params = "order")
+    public ResponseEntity<?> getOrderFollowers(@PathVariable ("userId") Integer userId, @RequestParam ("order") String order) {
+        return new ResponseEntity<>(userService.getOrderedFollowersById(userId,order), HttpStatus.OK);
     }
 }
