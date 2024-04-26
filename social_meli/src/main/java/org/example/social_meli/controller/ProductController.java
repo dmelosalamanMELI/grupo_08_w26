@@ -28,4 +28,19 @@ public class ProductController {
     public ResponseEntity<?> getOrderedSellersPostsFollowedByUser(@PathVariable Integer userId, @RequestParam String order) {
         return new ResponseEntity<>(productService.getOrderedSellersPostsFollowedByUser(userId, order), HttpStatus.OK);
     }
+
+    @PostMapping("/promo-post")
+    public ResponseEntity<?> postProductPromoPost(@RequestBody PostDTO postDTO) {
+        return new ResponseEntity<>(productService.savePost(postDTO), HttpStatus.OK);
+    }
+
+    @GetMapping("/promo-post/count")
+    public ResponseEntity<?> getPromoPostCount(@RequestParam Integer user_Id) {
+        return new ResponseEntity<>(productService.getPromoPostCount(user_Id), HttpStatus.OK);
+    }
+
+    @GetMapping("/promo-post/list")
+    public ResponseEntity<?> getPromoPostList(@RequestParam Integer user_Id) {
+        return new ResponseEntity<>(productService.getPromoPostList(user_Id), HttpStatus.OK);
+    }
 }

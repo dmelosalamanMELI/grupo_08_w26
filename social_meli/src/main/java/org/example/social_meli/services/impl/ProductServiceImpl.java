@@ -1,12 +1,11 @@
 package org.example.social_meli.services.impl;
 
-import org.example.social_meli.dto.FollowListDTO;
-import org.example.social_meli.dto.PostDTO;
-import org.example.social_meli.dto.UserResponseDTO;
+import org.example.social_meli.dto.*;
 import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.exceptions.ConflictException;
 import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.model.Post;
+import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IProductRepository;
 import org.example.social_meli.repository.IUserRepository;
 import org.example.social_meli.services.IProductService;
@@ -32,15 +31,15 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     IUserService userServiceImpl;
 
+    ModelMapper mapper = new ModelMapper();
+
     @Override
     public List<PostDTO> getAllPosts() {
-        ModelMapper mapper = new ModelMapper();
         return productRepository.getAllPosts().stream().map(post -> mapper.map(post, PostDTO.class)).toList();
     }
 
     @Override
     public PostDTO savePost(PostDTO postDTO) {
-        ModelMapper mapper = new ModelMapper();
         if (productRepository.existsPost(postDTO.getPost_id())) {
             throw new ConflictException("Ya existe un post con el id " + postDTO.getPost_id());
         }
@@ -100,5 +99,29 @@ public class ProductServiceImpl implements IProductService {
                 .sorted(Comparator.comparing(PostDTO::getDate).reversed())
                 .toList());
         return response;
+    }
+
+    @Override
+    public PromoProductsDTO getPromoPostCount(Integer user_Id) {
+        if (!userRepository.existsSellerById(user_Id)) {
+            throw new NotFoundException("No existe un vendedor con el id " +user_Id);
+        }
+        User user = userRepository.findById(user_Id);
+        return new PromoProductsDTO(user.getUser_id(),user.getUser_name(),productRepository.getPromoPostCount(user_Id));
+    }
+
+    @Override
+    public PromoListDTO getPromoPostList(Integer user_Id) {
+        if (!userRepository.existsSellerById(user_Id)) {
+            throw new NotFoundException("No existe un vendedor con el id " +user_Id);
+        }
+        User user = userRepository.findById(user_Id);
+        return new PromoListDTO(user.getUser_id(),
+                user.getUser_name(),
+                productRepository.getPromoPostListByUser(user_Id)
+                        .stream()
+                        .map(post -> mapper
+                                .map(post, PostDTO.class))
+                        .toList());
     }
 }
