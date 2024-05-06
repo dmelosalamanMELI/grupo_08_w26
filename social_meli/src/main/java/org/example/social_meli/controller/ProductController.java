@@ -1,5 +1,6 @@
 package org.example.social_meli.controller;
 
+import jakarta.validation.Valid;
 import org.example.social_meli.dto.PostDTO;
 import org.example.social_meli.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class ProductController {
     IProductService productService;
 
     @PostMapping("/post")
-    public ResponseEntity<?> postProductPost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<?> postProductPost(@RequestBody @Valid PostDTO postDTO) {
         return new ResponseEntity<>(productService.savePost(postDTO), HttpStatus.OK);
     }
 
