@@ -4,17 +4,19 @@ import org.example.social_meli.dto.UserCountResponseDTO;
 import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.model.FollowerList;
+import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -76,7 +78,48 @@ class UserServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
     }
-
+    @Test
+    /*Verificar que el usuario a seguir exista. (US-0001).*/
+    @DisplayName("El usuario no es vendedor")
+    void usernotVendedor() {
+        /*A Instanciar objeto*/
+        Integer userIdValid=1;
+        Integer userIdToFollow=2;
+        User client = new User(userIdValid, "cliente",false);
+        User seller = new User(userIdToFollow, "vendedor",false);
+        when(userRepository.existsById(userIdValid)).thenReturn(true);
+        when(userRepository.existsById(userIdToFollow)).thenReturn(true);
+        when(userRepository.findById(userIdValid)).thenReturn(client);
+        when(userRepository.findById(userIdToFollow)).thenReturn(seller);
+        /*Arrange*/
+        assertThrows(
+                BadRequestException.class,
+                () -> userService.followUser(userIdValid, userIdToFollow),
+                "No puede seguirlo, el usuario no es vendedor."
+        );
+        /*Assertions*/
+        verify(userRepository, times(1)).existsById(userIdValid);
+        verify(userRepository, times(1)).existsById(userIdToFollow);
+        verify(userRepository, times(1)).findById(userIdValid);
+        verify(userRepository, times(1)).findById(userIdToFollow);
+    }
+    @Test
+    @DisplayName("Verificar que el usuario a seguir exista. (US-0001).")
+    void existUser() {
+        /*A Instanciar objeto*/
+        Integer userIdValid=1;
+        Integer userIdNotValid=2;
+        when(userRepository.existsById(userIdValid)).thenReturn(true);
+        when(userRepository.existsById(userIdNotValid)).thenReturn(false);
+        /*Arrange*/
+        Exception exception=assertThrows(BadRequestException.class,()->{
+            userService.followUser(userIdValid, userIdNotValid);
+        });
+        /*Assertions*/
+        assertEquals("Uno o ambos usuarios no existen", exception.getMessage());
+        verify(userRepository, times(1)).existsById(userIdValid);
+        verify(userRepository, times(1)).existsById(userIdNotValid);
+    }
     @Test
     @DisplayName("Deberia lanzar una excepcion sino existe el cliente")
     void unfollowUserWhenClientNotFound() {
