@@ -8,7 +8,6 @@ import org.example.social_meli.repository.IProductRepository;
 import org.example.social_meli.repository.IUserRepository;
 import org.example.social_meli.services.IProductService;
 import org.example.social_meli.services.IUserService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -113,9 +112,6 @@ public class ProductServiceImplTest {
         assertEquals(followListDTO, actual);
 
     }
-
-
-
 
 }
 
