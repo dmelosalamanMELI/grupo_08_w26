@@ -1,7 +1,7 @@
 package org.example.social_meli.services.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.social_meli.dto.UserCountResponseDTO;
+import org.example.social_meli.dto.UserResponseDTO;
+import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
@@ -11,69 +11,72 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
     @Mock
-    IUserRepository userRepository;
+    private IUserRepository userRepository;
 
     @InjectMocks
-    UserServiceImpl userService;
-
-    User user = new User();
-    FollowerList followerList = new FollowerList(user);
+    private UserServiceImpl userService;
 
     @BeforeEach
     void setUp() {
-        user.setUser_id(1);
-        user.setUser_name("Test User");
-        followerList.getFollower().add(new User());
-        followerList.getFollower().add(new User());
     }
 
-    @DisplayName("Test Count Followers")
     @Test
-    void countFollowersTest() {
+    @DisplayName("Deberia dejar de seguir a un usuario")
+    void unfollowUser() {
+        Integer userId = 1;
+        Integer userIdToUnfollow = 2;
+        User client = new User(userId, "cliente", false);
+        User seller = new User(userIdToUnfollow, "vendedor", true);
 
-        User user = new User();
-        user.setUser_id(1);
-        user.setUser_name("Test User");
+        when(userRepository.findSellerById(any())).thenReturn(new FollowerList(seller));
+        when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
 
-        FollowerList followerList = new FollowerList(user);
-        followerList.getFollower().add(new User());
-        followerList.getFollower().add(new User());
+        UserResponseDTO returned = userService.unfollowUser(userId, userIdToUnfollow);
 
-        when(userRepository.findSellerById(1)).thenReturn(followerList);
+        Mockito.verify(userRepository, times(1)).findClientById(anyInt());
+        Mockito.verify(userRepository, times(1)).getClientIndex(any());
+        Mockito.verify(userRepository, times(1)).findSellerById(anyInt());
+        Mockito.verify(userRepository, times(1)).getSellerIndex(any());
+        Mockito.verify(userRepository, times(1)).updateClients(anyInt(), any());
+        Mockito.verify(userRepository, times(1)).updateSellers(anyInt(), any());
 
-        UserCountResponseDTO result = userService.countFollowers(1);
-
-        assertEquals(1, result.getUser_id());
-        assertEquals("Test User", result.getUser_name());
-        assertEquals(2, result.getFollowers_count());
+        assertEquals(0, returned.getFollower().size());
     }
 
-    @DisplayName("Test Empty Followers List")
     @Test
-    void emptyFollowersListTest() {
+    @DisplayName("Deberia lanzar una excepcion sino existe el vendedor")
+    void unfollowUserWhenSellerNotFound() {
+        Integer userId = 12531;
+        Integer userIdToUnfollow = 2;
+        User client = new User(userId, "cliente", false);
 
-        User user = new User();
-        user.setUser_id(1);
-        user.setUser_name("Test User");
+        when(userRepository.findSellerById(any())).thenReturn(null);
+        when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
 
-        FollowerList followerList = new FollowerList(user);
+        assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
+    }
 
-        when(userRepository.findSellerById(1)).thenReturn(followerList);
+    @Test
+    @DisplayName("Deberia lanzar una excepcion sino existe el cliente")
+    void unfollowUserWhenClientNotFound() {
+        Integer userId = 1;
+        Integer userIdToUnfollow = 22123;
 
-        UserCountResponseDTO result = userService.countFollowers(1);
+        when(userRepository.findClientById(any())).thenReturn(null);
 
-        assertEquals(1, result.getUser_id());
-        assertEquals("Test User", result.getUser_name());
-        assertTrue(result.getFollowers_count() == 0);
+        assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
     }
 }
