@@ -1,6 +1,7 @@
 package org.example.social_meli.services.impl;
 
 import org.example.social_meli.dto.UserResponseDTO;
+import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
@@ -53,5 +54,29 @@ class UserServiceImplTest {
         Mockito.verify(userRepository, times(1)).updateSellers(anyInt(), any());
 
         assertEquals(0, returned.getFollower().size());
+    }
+
+    @Test
+    @DisplayName("Deberia lanzar una excepcion sino existe el vendedor")
+    void unfollowUserWhenSellerNotFound() {
+        Integer userId = 12531;
+        Integer userIdToUnfollow = 2;
+        User client = new User(userId, "cliente", false);
+
+        when(userRepository.findSellerById(any())).thenReturn(null);
+        when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
+
+        assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
+    }
+
+    @Test
+    @DisplayName("Deberia lanzar una excepcion sino existe el cliente")
+    void unfollowUserWhenClientNotFound() {
+        Integer userId = 1;
+        Integer userIdToUnfollow = 22123;
+
+        when(userRepository.findClientById(any())).thenReturn(null);
+
+        assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
     }
 }
