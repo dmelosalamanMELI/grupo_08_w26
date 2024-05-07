@@ -36,9 +36,9 @@ class UserServiceImplTest {
     @DisplayName("Deberia dejar de seguir a un usuario")
     void unfollowUser() {
         Integer userId = 1;
-        Integer userIdToUnfollow = -1;
+        Integer userIdToUnfollow = 2;
         User client = new User(userId, "cliente", false);
-        User seller = new User(userId, "vendedor", true);
+        User seller = new User(userIdToUnfollow, "vendedor", true);
 
         when(userRepository.findSellerById(any())).thenReturn(new FollowerList(seller));
         when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
