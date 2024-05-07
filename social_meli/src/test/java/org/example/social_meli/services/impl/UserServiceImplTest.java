@@ -1,5 +1,6 @@
 package org.example.social_meli.services.impl;
 
+import org.example.social_meli.dto.UserCountResponseDTO;
 import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.model.FollowerList;
@@ -29,8 +30,15 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    User user = new User();
+    FollowerList followerList = new FollowerList(user);
+
     @BeforeEach
     void setUp() {
+        user.setUser_id(1);
+        user.setUser_name("Test User");
+        followerList.getFollower().add(new User());
+        followerList.getFollower().add(new User());
     }
 
     @Test
@@ -79,4 +87,46 @@ class UserServiceImplTest {
 
         assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
     }
+
+    @DisplayName("Test Count Followers")
+    @Test
+    void countFollowersTest() {
+
+        User user = new User();
+        user.setUser_id(1);
+        user.setUser_name("Test User");
+
+        FollowerList followerList = new FollowerList(user);
+        followerList.getFollower().add(new User());
+        followerList.getFollower().add(new User());
+
+        when(userRepository.findSellerById(1)).thenReturn(followerList);
+
+        UserCountResponseDTO result = userService.countFollowers(1);
+
+        assertEquals(1, result.getUser_id());
+        assertEquals("Test User", result.getUser_name());
+        assertEquals(2, result.getFollowers_count());
+    }
+
+    @DisplayName("Test Empty Followers List")
+    @Test
+    void emptyFollowersListTest() {
+
+        User user = new User();
+        user.setUser_id(1);
+        user.setUser_name("Test User");
+
+        FollowerList followerList = new FollowerList(user);
+
+        when(userRepository.findSellerById(1)).thenReturn(followerList);
+
+        UserCountResponseDTO result = userService.countFollowers(1);
+
+        assertEquals(1, result.getUser_id());
+        assertEquals("Test User", result.getUser_name());
+        assertTrue(result.getFollowers_count() == 0);
+    }
+
+
 }
