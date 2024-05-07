@@ -56,13 +56,13 @@ class UserRepositoryTest {
     void existById_UserExits(){
         Integer userId = 1;
         Boolean exists = userRepository.existsById(userId);
-        assertTrue(exists, "El método debería retornar verdadero para un usuario existente");
+        Assertions.assertTrue(exists, "El método debería retornar verdadero para un usuario existente");
     }
     @Test
     @DisplayName("Veficar método exixtByID, usuario no existente.")
     void existById_UserNoExits(){
         Integer userId = 5;
         Boolean exists = userRepository.existsById(userId);
-        assertFalse(exists, "El método debería retornar falso para un usuario existente");
+        Assertions.assertFalse(exists, "El método debería retornar falso para un usuario existente");
     }
 }
