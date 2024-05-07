@@ -1,5 +1,6 @@
 package org.example.social_meli.services.impl;
 
+import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
@@ -42,7 +43,7 @@ class UserServiceImplTest {
         when(userRepository.findSellerById(any())).thenReturn(new FollowerList(seller));
         when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
 
-        userService.unfollowUser(userId, userIdToUnfollow);
+        UserResponseDTO returned = userService.unfollowUser(userId, userIdToUnfollow);
 
         Mockito.verify(userRepository, times(1)).findClientById(anyInt());
         Mockito.verify(userRepository, times(1)).getClientIndex(any());
@@ -50,5 +51,7 @@ class UserServiceImplTest {
         Mockito.verify(userRepository, times(1)).getSellerIndex(any());
         Mockito.verify(userRepository, times(1)).updateClients(anyInt(), any());
         Mockito.verify(userRepository, times(1)).updateSellers(anyInt(), any());
+
+        assertEquals(0, returned.getFollower().size());
     }
 }
