@@ -101,8 +101,16 @@ public class UserServiceImpl implements IUserService {
         FollowerList client = userRepository.findClientById(userId);
         Integer indexClient = userRepository.getClientIndex(client);
 
+        if (client == null) {
+            throw new NotFoundException("No existe el usuario " + userId);
+        }
+
         FollowerList seller = userRepository.findSellerById(userIdToUnfollow);
         Integer indexSeller =  userRepository.getSellerIndex(seller);
+
+        if (seller == null) {
+            throw new NotFoundException("No existe el usuario " + userIdToUnfollow);
+        }
 
         List<User> followers = seller.getFollower();
         List<User> followed = client.getFollower();
