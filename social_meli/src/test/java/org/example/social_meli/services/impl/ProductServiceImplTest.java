@@ -71,8 +71,7 @@ public class ProductServiceImplTest {
         when(userService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
         when(iProductService.getSellersPostsFollowedByUser(id)).thenReturn(followListDTO);
         when(iProductService.getAllPosts()).thenReturn(List.of());
-
-
+        
         //Assert
         assertThrows(
                 BadRequestException.class,
@@ -92,7 +91,7 @@ public class ProductServiceImplTest {
         when(iProductService.getAllPosts()).thenReturn(List.of());
 
         //Assert
-        FollowListDTO actual = iProductService.getOrderedSellersPostsFollowedByUser(id, orderBy);
+        FollowListDTO actual = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
 
         assertEquals(followListDTO, actual);
     }
@@ -109,7 +108,7 @@ public class ProductServiceImplTest {
         when(iProductService.getAllPosts()).thenReturn(List.of());
 
         //Assert
-        FollowListDTO actual = iProductService.getOrderedSellersPostsFollowedByUser(id, orderBy);
+        FollowListDTO actual = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
 
         assertEquals(followListDTO, actual);
 
