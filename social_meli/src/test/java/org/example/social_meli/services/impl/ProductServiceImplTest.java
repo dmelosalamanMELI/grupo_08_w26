@@ -1,5 +1,6 @@
 package org.example.social_meli.services.impl;
 
+import org.example.social_meli.dto.FollowListDTO;
 import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.repository.IProductRepository;
@@ -34,7 +35,7 @@ public class ProductServiceImplTest {
 
     @Test
     @DisplayName("Verificar que el tipo de ordenamiento por fecha exista (US-0009)")
-    public void  getOrderedSellersPostsFollowedByUserExistenceExceptionTest(){
+    public void getOrderedSellersPostsFollowedByUserExistenceExceptionTest(){
         //Arrange
         Integer id = 1;
         String orderBy = "wrong_input";
@@ -45,7 +46,11 @@ public class ProductServiceImplTest {
         when(userService.getFollowedById(id)).thenReturn(userResponseDTO);
 
         //Assert
-        Assertions.assertThrows(BadRequestException.class, ()->productService.getOrderedSellersPostsFollowedByUser(id, orderBy));
+        Assertions.assertThrows(
+                BadRequestException.class,
+                () -> productService.getOrderedSellersPostsFollowedByUser(id, orderBy)
+        );
     }
+
 }
 
