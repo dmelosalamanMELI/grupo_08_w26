@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
@@ -117,7 +116,7 @@ class UserServiceImplTest {
             userService.followUser(userIdValid, userIdNotValid);
         });
         /*Assertions*/
-        Assertions.assertEquals("Uno o ambos usuarios no existen", exception.getMessage());
+        assertEquals("Uno o ambos usuarios no existen", exception.getMessage());
         verify(userRepository, times(1)).existsById(userIdValid);
         verify(userRepository, times(1)).existsById(userIdNotValid);
     }

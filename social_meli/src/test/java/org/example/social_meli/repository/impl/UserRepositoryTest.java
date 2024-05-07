@@ -33,8 +33,8 @@ public class UserRepositoryTest {
     void findById_UserExist() {
         Integer userId = 1;
         User found = userRepository.findById(userId);
-        Assertions.assertEquals(userId, found.getUser_id(), "El ID del usuario encontrado debe coincidir con el buscado.");
-        Assertions.assertNotNull(found, "El usuario encontrado no debe ser nulo.");
+        assertEquals(userId, found.getUser_id(), "El ID del usuario encontrado debe coincidir con el buscado.");
+        assertNotNull(found, "El usuario encontrado no debe ser nulo.");
     }
     @Test
     @DisplayName("Verificar método findByID, usuario no existe.")
@@ -48,7 +48,7 @@ public class UserRepositoryTest {
     void existById_UserExits(){
         Integer userId = 1;
         Boolean exists = userRepository.existsById(userId);
-        Assertions.assertTrue(exists, "El método debería retornar verdadero para un usuario existente");
+        assertTrue(exists, "El método debería retornar verdadero para un usuario existente");
     }
     @Test
     @DisplayName("Veficar método exixtByID, usuario no existente.")
