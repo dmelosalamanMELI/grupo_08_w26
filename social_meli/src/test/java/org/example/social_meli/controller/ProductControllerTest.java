@@ -3,6 +3,7 @@ package org.example.social_meli.controller;
 import org.example.social_meli.dto.FollowListDTO;
 import org.example.social_meli.services.IProductService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,6 +24,7 @@ public class ProductControllerTest {
     ProductController productController;
 
     @Test
+    @DisplayName("Verificar que el tipo de ordenamiento por fecha exista (US-0009) ASC")
     public void getOrderedAscSellersPostsFollowedByUserTest() {
         //Arrange
         Integer user_id = 1;
@@ -43,6 +44,7 @@ public class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("Verificar que el tipo de ordenamiento por fecha exista (US-0009) DESC")
     public void getOrderedDescSellersPostsFollowedByUserTest() {
         //Arrange
         Integer user_id = 1;

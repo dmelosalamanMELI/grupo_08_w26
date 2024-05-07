@@ -1,6 +1,5 @@
 package org.example.social_meli.services.impl;
 
-import org.example.social_meli.dto.FollowListDTO;
 import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.repository.IProductRepository;
