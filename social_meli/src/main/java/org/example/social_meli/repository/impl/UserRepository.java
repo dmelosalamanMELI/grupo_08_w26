@@ -71,17 +71,6 @@ public class UserRepository implements IUserRepository {
                 .orElse(null);
     }
 
-    public FollowerList getFollowerByUserId(Integer userId) {
-        return sellerList
-                .stream()
-                .filter(follower ->
-                        follower.getUser()
-                                .getUser_id()
-                                .equals(userId))
-                .findFirst()
-                .orElseThrow();
-    }
-
     @Override
     public FollowerList findSellerById(Integer id) {
         return sellerList

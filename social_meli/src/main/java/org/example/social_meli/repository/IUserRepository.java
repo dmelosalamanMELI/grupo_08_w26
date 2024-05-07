@@ -8,7 +8,6 @@ public interface IUserRepository {
     Integer getClientIndex(FollowerList client);
     Integer getSellerIndex(FollowerList seller);
     User findById(Integer user_id);
-    FollowerList getFollowerByUserId(Integer userId);
     FollowerList findSellerById(Integer id);
     FollowerList findClientById(Integer id);
     FollowerList findSellerByUser(User user);
