@@ -1,31 +1,17 @@
 package org.example.social_meli.repository.impl;
-
 import org.example.social_meli.model.FollowerList;
 import org.example.social_meli.model.User;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.example.social_meli.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
-class UserRepositoryTest {
-    @Mock
+public class UserRepositoryTest {
+
     private List<User> userList;
 
-    @InjectMocks
     private UserRepository userRepository;
     private FollowerList followerList;
     private User user;
@@ -35,13 +21,12 @@ class UserRepositoryTest {
         userRepository = new UserRepository();
         user = new User(1, "user", false);
         followerList = new FollowerList(user);
-        Mockito.reset(userList);
+
         User user1 = new User(2, "User1", true);
         User user2 = new User(1,"User2",false);
         List <User> users =new ArrayList<>();
         users.add(user1);
         users.add(user2);
-        when(userList.stream()).thenReturn(users.stream());
     }
     @Test
     @DisplayName("Verificar método findByID, usuario existe.")
@@ -54,9 +39,9 @@ class UserRepositoryTest {
     @Test
     @DisplayName("Verificar método findByID, usuario no existe.")
     void findById_UserNoExist() {
-        Integer userId = 5;
+        Integer userId = 99999;
         User found = userRepository.findById(userId);
-        Assertions.assertNull(found, "Debe devolver null si el usuario no existe.");
+        assertNull(found, "Debe devolver null si el usuario no existe.");
     }
     @Test
     @DisplayName("Veficar método exixtByID, usuario existente.")
@@ -68,9 +53,9 @@ class UserRepositoryTest {
     @Test
     @DisplayName("Veficar método exixtByID, usuario no existente.")
     void existById_UserNoExits(){
-        Integer userId = 5;
+        Integer userId = 588;
         Boolean exists = userRepository.existsById(userId);
-        Assertions.assertFalse(exists, "El método debería retornar falso para un usuario existente");
+        assertFalse(exists, "El método debería retornar falso para un usuario existente");
     }
     @Test
     @DisplayName("Deberia retornar el indice del cliente")
