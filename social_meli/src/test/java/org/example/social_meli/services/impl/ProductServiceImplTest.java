@@ -101,41 +101,43 @@ public class ProductServiceImplTest {
     @Test
     @DisplayName("Verificar que el tipo de ordenamiento por fecha exista (US-0009) ASC")
     public void getAscOrderedSellersPostsFollowedByUserExistenceTest(){
+        //Arrange
         Integer id = 1;
         String orderBy = "date_asc";
 
-        //Act
         when(userService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
         when(iProductService.getSellersPostsFollowedByUser(id)).thenReturn(followListDTO);
         when(iProductService.getAllPosts()).thenReturn(List.of());
 
-        //Assert
+        //Act
         FollowListDTO actual = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
 
+        //Assert
         assertEquals(followListDTO, actual);
     }
 
     @Test
     @DisplayName("Verificar que el tipo de ordenamiento por fecha exista (US-0009) DESC")
     public void getDescOrderedSellersPostsFollowedByUserExistenceTest(){
+        //Arrange
         Integer id = 1;
         String orderBy = "date_desc";
 
-        //Act
         when(userService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
         when(iProductService.getSellersPostsFollowedByUser(id)).thenReturn(followListDTO);
         when(iProductService.getAllPosts()).thenReturn(List.of());
 
-        //Assert
+        //Act
         FollowListDTO actual = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
 
+        //Assert
         assertEquals(followListDTO, actual);
-
     }
 
     @DisplayName("Prueba orden ascendente de posts")
     @Test
     public void getSellersPostsFollowedByUserDescTest() {
+        //Arrange
         Integer id = 1;
         String orderBy = "date_asc";
 
@@ -145,6 +147,7 @@ public class ProductServiceImplTest {
         when(userService.getFollowedById(id)).thenReturn(userResponseDTO);
         when(productRepository.getAllPosts()).thenReturn(allPosts);
 
+        //Act
         FollowListDTO result = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
 
         // ASSERTIONS
@@ -156,6 +159,7 @@ public class ProductServiceImplTest {
     @DisplayName("Prueba orden descendente de posts")
     @Test
     public void getSellersPostsFollowedByUserAscTest() {
+        //Arrange
         Integer id = 1;
         String orderBy = "date_desc";
 
@@ -164,7 +168,7 @@ public class ProductServiceImplTest {
 
         when(userService.getFollowedById(id)).thenReturn(userResponseDTO);
         when(productRepository.getAllPosts()).thenReturn(allPosts);
-
+        //Act
         FollowListDTO result = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
 
         // ASSERTIONS
@@ -176,6 +180,7 @@ public class ProductServiceImplTest {
     @DisplayName("Prueba que no traiga posts de mas de dos semanas")
     @Test
     public void getSellersPostsFollowedByUserTwoWeeksTest() {
+        //Arrange
         Integer id = 1;
 
         // Se prepara el test de mas de 2 semanas
@@ -190,6 +195,7 @@ public class ProductServiceImplTest {
         when(userService.getFollowedById(1)).thenReturn(userResponseDTO);
         when(productRepository.getAllPosts()).thenReturn(allPosts);
 
+        //Act
         FollowListDTO result = productService.getSellersPostsFollowedByUser(id);
 
         // ASSERTIONS
@@ -201,6 +207,7 @@ public class ProductServiceImplTest {
     @DisplayName("verifica el caso de un usuario sin seguidos")
     @Test
     public void getSellersPostsFollowedByUserWithoutFollowedTest() {
+        //Arrange
         Integer idUserNoFolloweds = 4;
 
         // Configuración de usuario a seguir
@@ -208,7 +215,7 @@ public class ProductServiceImplTest {
 
         when(userService.getFollowedById(idUserNoFolloweds)).thenReturn(userResponseDTO);
         when(productRepository.getAllPosts()).thenReturn(allPosts);
-
+        //Act
         FollowListDTO result = productService.getSellersPostsFollowedByUser(idUserNoFolloweds);
 
         // ASSERTIONS
@@ -216,4 +223,3 @@ public class ProductServiceImplTest {
     }
 
 }
-

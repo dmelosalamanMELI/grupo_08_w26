@@ -38,6 +38,7 @@ class UserServiceImplTest {
 
     @Mock
     private ObjectMapper objectMapper;
+
     @Mock
     private IUserService iUserService;
 
@@ -45,20 +46,23 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    User client;
-    FollowerList clientFollowedList;
-    User seller;
-    FollowerList sellerFollowerList;
     User user = new User();
+    User client;
+    User seller;
+
+    FollowerList clientFollowedList;
+    FollowerList sellerFollowerList;
     FollowerList followerList = new FollowerList(user);
 
     UserResponseDTO userResponseDTO=new UserResponseDTO();
+
     Integer id;
     String orderBy;
     String user_name;
 
     @BeforeEach()
     void setUp(){
+
         user.setUser_id(1);
         user.setUser_name("Test User");
         followerList.getFollower().add(new User());
@@ -101,16 +105,20 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Deberia dejar de seguir a un usuario")
     void unfollowUser() {
+        //Arrange
         Integer userId = 1;
         Integer userIdToUnfollow = 2;
+
         User client = new User(userId, "cliente", false);
         User seller = new User(userIdToUnfollow, "vendedor", true);
 
         when(userRepository.findSellerById(any())).thenReturn(new FollowerList(seller));
         when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
 
+        //Act
         UserResponseDTO returned = userService.unfollowUser(userId, userIdToUnfollow);
 
+        //Assertions
         verify(userRepository, times(1)).findClientById(anyInt());
         verify(userRepository, times(1)).getClientIndex(any());
         verify(userRepository, times(1)).findSellerById(anyInt());
@@ -124,20 +132,22 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Deberia lanzar una excepcion sino existe el vendedor")
     void unfollowUserWhenSellerNotFound() {
+        //Arrange
         Integer userId = 12531;
         Integer userIdToUnfollow = 2;
         User client = new User(userId, "cliente", false);
 
         when(userRepository.findSellerById(any())).thenReturn(null);
         when(userRepository.findClientById(any())).thenReturn(new FollowerList(client));
-
+        //Act - Assert
         assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
     }
     @Test
     /*Verificar que el usuario a seguir exista. (US-0001).*/
     @DisplayName("El usuario no es vendedor")
     void usernotVendedor() {
-        /*A Instanciar objeto*/
+        //Arrange
+
         Integer userIdValid=1;
         Integer userIdToFollow=2;
         User client = new User(userIdValid, "cliente",false);
@@ -146,13 +156,13 @@ class UserServiceImplTest {
         when(userRepository.existsById(userIdToFollow)).thenReturn(true);
         when(userRepository.findById(userIdValid)).thenReturn(client);
         when(userRepository.findById(userIdToFollow)).thenReturn(seller);
-        /*Arrange*/
+        //Act - Assert
         assertThrows(
                 BadRequestException.class,
                 () -> userService.followUser(userIdValid, userIdToFollow),
                 "No puede seguirlo, el usuario no es vendedor."
         );
-        /*Assertions*/
+
         verify(userRepository, times(1)).existsById(userIdValid);
         verify(userRepository, times(1)).existsById(userIdToFollow);
         verify(userRepository, times(1)).findById(userIdValid);
@@ -161,16 +171,16 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Verificar que el usuario a seguir exista. (US-0001).")
     void existUser() {
-        /*A Instanciar objeto*/
+        //Arrange
         Integer userIdValid=1;
         Integer userIdNotValid=2;
         when(userRepository.existsById(userIdValid)).thenReturn(true);
         when(userRepository.existsById(userIdNotValid)).thenReturn(false);
-        /*Arrange*/
+        //Act - Assertions
         Exception exception=assertThrows(BadRequestException.class,()->{
             userService.followUser(userIdValid, userIdNotValid);
         });
-        /*Assertions*/
+
         assertEquals("Uno o ambos usuarios no existen", exception.getMessage());
         verify(userRepository, times(1)).existsById(userIdValid);
         verify(userRepository, times(1)).existsById(userIdNotValid);
@@ -178,18 +188,19 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Deberia lanzar una excepcion sino existe el cliente")
     void unfollowUserWhenClientNotFound() {
+        //Arrange
         Integer userId = 1;
         Integer userIdToUnfollow = 22123;
 
         when(userRepository.findClientById(any())).thenReturn(null);
-
+        //Act - Assert
         assertThrows(NotFoundException.class, () -> userService.unfollowUser(userId, userIdToUnfollow));
     }
 
     @DisplayName("Test Count Followers")
     @Test
     void countFollowersTest() {
-
+        //Arrange
         User user = new User();
         user.setUser_id(1);
         user.setUser_name("Test User");
@@ -199,9 +210,9 @@ class UserServiceImplTest {
         followerList.getFollower().add(new User());
 
         when(userRepository.findSellerById(1)).thenReturn(followerList);
-
+        //Act
         UserCountResponseDTO result = userService.countFollowers(1);
-
+        //Assertions
         assertEquals(1, result.getUser_id());
         assertEquals("Test User", result.getUser_name());
         assertEquals(2, result.getFollowers_count());
@@ -210,7 +221,7 @@ class UserServiceImplTest {
     @DisplayName("Test Empty Followers List")
     @Test
     void emptyFollowersListTest() {
-
+        //Arrange
         User user = new User();
         user.setUser_id(1);
         user.setUser_name("Test User");
@@ -218,9 +229,9 @@ class UserServiceImplTest {
         FollowerList followerList = new FollowerList(user);
 
         when(userRepository.findSellerById(1)).thenReturn(followerList);
-
+        //Act
         UserCountResponseDTO result = userService.countFollowers(1);
-
+        //Assertions
         assertEquals(1, result.getUser_id());
         assertEquals("Test User", result.getUser_name());
         assertTrue(result.getFollowers_count() == 0);
@@ -229,6 +240,7 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Obtener la lista ordenada ascendentemente de seguidores de un usuario")
     void getAscOrderedFollowersById() {
+        //Arrange
         id=2;
         orderBy="name_asc";
         user_name="user2";
@@ -240,15 +252,16 @@ class UserServiceImplTest {
         when(iUserService.getFollowers(anyInt())).thenReturn(userResponseDTO);
         when(userRepository.findSellerById(anyInt())).thenReturn(followerList);
         when(userRepository.existsSellerById(anyInt())).thenReturn(true);
-
+        //Act
         UserResponseDTO returned = userService.getOrderedFollowersById(id, orderBy);
-
+        //Asser
         assertEquals(userResponseDTO, returned);
     }
 
     @Test
     @DisplayName("Obtener la lista ordenada descendentemente de seguidores de un usuario")
     void getDescOrderedFollowersById() {
+        //Arrange
         id=2;
         orderBy="name_desc";
         user_name="user2";
@@ -260,15 +273,16 @@ class UserServiceImplTest {
         when(iUserService.getFollowers(anyInt())).thenReturn(userResponseDTO);
         when(userRepository.findSellerById(anyInt())).thenReturn(followerList);
         when(userRepository.existsSellerById(anyInt())).thenReturn(true);
-
+        //Act
         UserResponseDTO returned = userService.getOrderedFollowersById(id, orderBy);
-
+        //Assert
         assertEquals(userResponseDTO, returned);
     }
 
     @Test
     @DisplayName("Obtener la lista ordenada ascendentemente de seguidos de un usuario")
     void getAscOrderedFollowedById() {
+        //Arrange
         id=1;
         orderBy="name_asc";
         user_name="user1";
@@ -280,15 +294,16 @@ class UserServiceImplTest {
         when(iUserService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
         when(userRepository.findClientById(anyInt())).thenReturn(followerList);
         when(userRepository.existsClientById(anyInt())).thenReturn(true);
-
+        //Act
         UserResponseDTO returned = userService.getOrderedFollowedById(id, orderBy);
-
+        //Assert
         assertEquals(userResponseDTO, returned);
     }
 
     @Test
     @DisplayName("Obtener la lista ordenada descendentemente de seguidos de un usuario")
     void getDescOrderedFollowedById() {
+        //Arrange
         id=1;
         orderBy="name_desc";
         user_name="user1";
@@ -300,15 +315,16 @@ class UserServiceImplTest {
         when(iUserService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
         when(userRepository.findClientById(anyInt())).thenReturn(followerList);
         when(userRepository.existsClientById(anyInt())).thenReturn(true);
-
+        //Act
         UserResponseDTO returned = userService.getOrderedFollowedById(id, orderBy);
-
+        //Assert
         assertEquals(userResponseDTO, returned);
     }
 
     @Test
     @DisplayName("Deberia lanzar una excepcion si el orderBy no es valido al consultar seguidores")
     void getExceptionOrderedFollowersById() {
+        //Arrange
         id=1;
         orderBy="qwerty";
         user_name="user1";
@@ -316,13 +332,14 @@ class UserServiceImplTest {
 
         when(userRepository.findSellerById(anyInt())).thenReturn(followerList);
         when(userRepository.existsSellerById(anyInt())).thenReturn(true);
-
+        //Act - Assert
         assertThrows(BadRequestException.class, () -> userService.getOrderedFollowersById(id, orderBy));
     }
 
     @Test
     @DisplayName("Deberia lanzar una excepcion si el orderBy no es valido al consultar seguidos por un usuario")
     void getExceptionOrderedFollowedById() {
+        //Arrange
         id=1;
         orderBy="qwerty";
         user_name="user1";
@@ -330,12 +347,13 @@ class UserServiceImplTest {
 
         when(userRepository.findClientById(anyInt())).thenReturn(followerList);
         when(userRepository.existsClientById(anyInt())).thenReturn(true);
-
+        //Act - Assert
         assertThrows(BadRequestException.class, () -> userService.getOrderedFollowedById(id, orderBy));
     }
     @Test
     @DisplayName("Trae la lista de seguidos ordenados de forma ascendente")
     void getOrderedFollowedListAscTest(){
+        //Arrange
         String order = "name_asc";
         UserResponseDTO expectedResult = UserResponseDTO.builder()
                 .user_id(1)
@@ -346,9 +364,9 @@ class UserServiceImplTest {
                         new UserDTO(2,"darth"),
                         new UserDTO(4,"zorth")
                 )).build();
-
+        //Act
         UserResponseDTO result = userService.getOrderedFollowedById(1,order);
-
+        //Assert
         assertThat(result,samePropertyValuesAs(expectedResult));
 
     }
@@ -356,6 +374,7 @@ class UserServiceImplTest {
     @Test
     @DisplayName("Trae la lista de seguidos ordenados de forma descendente")
     void getOrderedFollowedListDescTest(){
+        //Arrange
         UserResponseDTO expectedResult = UserResponseDTO.builder()
                 .user_id(1)
                 .user_name("username1")
@@ -366,14 +385,16 @@ class UserServiceImplTest {
                         new UserDTO(3,"Aseller")
                 )).build();
         String order = "name_desc";
+        //Act
         UserResponseDTO result = userService.getOrderedFollowedById(1,order);
+        //Assert
         assertThat(result,samePropertyValuesAs(expectedResult));
-
     }
 
     @Test
     @DisplayName("Trae la lista de seguidores ordenados de forma ascendente")
     void getOrderedFollowerListAscTest(){
+        //Arrange
         String order = "name_asc";
         UserResponseDTO expectedResult = UserResponseDTO.builder()
                 .user_id(12)
@@ -383,15 +404,16 @@ class UserServiceImplTest {
                         new UserDTO(3,"Mister X" ),
                         new UserDTO(1,"username1")
                 )).build();
-
+        //Act
         UserResponseDTO result = userService.getOrderedFollowersById(12,order);
-
+        //Assert
         assertThat(result,samePropertyValuesAs(expectedResult));
     }
 
     @Test
     @DisplayName("Trae la lista de seguidores ordenados de forma descendente")
     void getOrderedFollowerListDescTest(){
+        //Arrange
         String order = "name_desc";
         UserResponseDTO expectedResult = UserResponseDTO.builder()
                 .user_id(12)
@@ -401,9 +423,9 @@ class UserServiceImplTest {
                         new UserDTO(3,"Mister X" ),
                         new UserDTO(5,"Lisa")
                 )).build();
-
+        //Act
         UserResponseDTO result = userService.getOrderedFollowersById(12,order);
-
+        //Assert
         assertThat(result,samePropertyValuesAs(expectedResult));
     }
 
