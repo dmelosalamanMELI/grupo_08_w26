@@ -1,37 +1,51 @@
 package org.example.social_meli.services.impl;
+
+
 import org.example.social_meli.dto.UserCountResponseDTO;
 import org.example.social_meli.dto.UserResponseDTO;
+import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.exceptions.NotFoundException;
 import org.example.social_meli.model.FollowerList;
-import org.example.social_meli.exceptions.BadRequestException;
 import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
+import org.example.social_meli.services.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class UserServiceImplTest {
 
     @Mock
     private IUserRepository userRepository;
+
+    @Mock
+    private IUserService iUserService;
+
 
     @InjectMocks
     private UserServiceImpl userService;
 
     User user = new User();
     FollowerList followerList = new FollowerList(user);
+
+    UserResponseDTO userResponseDTO=new UserResponseDTO();
+    Integer id;
+    String orderBy;
+    String user_name;
 
     @BeforeEach
     void setUp() {
@@ -54,12 +68,12 @@ class UserServiceImplTest {
 
         UserResponseDTO returned = userService.unfollowUser(userId, userIdToUnfollow);
 
-        Mockito.verify(userRepository, times(1)).findClientById(anyInt());
-        Mockito.verify(userRepository, times(1)).getClientIndex(any());
-        Mockito.verify(userRepository, times(1)).findSellerById(anyInt());
-        Mockito.verify(userRepository, times(1)).getSellerIndex(any());
-        Mockito.verify(userRepository, times(1)).updateClients(anyInt(), any());
-        Mockito.verify(userRepository, times(1)).updateSellers(anyInt(), any());
+        verify(userRepository, times(1)).findClientById(anyInt());
+        verify(userRepository, times(1)).getClientIndex(any());
+        verify(userRepository, times(1)).findSellerById(anyInt());
+        verify(userRepository, times(1)).getSellerIndex(any());
+        verify(userRepository, times(1)).updateClients(anyInt(), any());
+        verify(userRepository, times(1)).updateSellers(anyInt(), any());
 
         assertEquals(0, returned.getFollower().size());
     }
@@ -169,5 +183,111 @@ class UserServiceImplTest {
         assertTrue(result.getFollowers_count() == 0);
     }
 
+    @Test
+    @DisplayName("Obtener la lista ordenada ascendentemente de seguidores de un usuario")
+    void getAscOrderedFollowersById() {
+        id=2;
+        orderBy="name_asc";
+        user_name="user2";
+        userResponseDTO.setUser_id(id);
+        userResponseDTO.setUser_name(user_name);
+        userResponseDTO.setFollower(List.of());
+        FollowerList followerList = new FollowerList(new User(2, "user2", true),List.of());
 
+        when(iUserService.getFollowers(anyInt())).thenReturn(userResponseDTO);
+        when(userRepository.findSellerById(anyInt())).thenReturn(followerList);
+        when(userRepository.existsSellerById(anyInt())).thenReturn(true);
+
+        UserResponseDTO returned = userService.getOrderedFollowersById(id, orderBy);
+
+        assertEquals(userResponseDTO, returned);
+    }
+
+    @Test
+    @DisplayName("Obtener la lista ordenada descendentemente de seguidores de un usuario")
+    void getDescOrderedFollowersById() {
+        id=2;
+        orderBy="name_desc";
+        user_name="user2";
+        userResponseDTO.setUser_id(id);
+        userResponseDTO.setUser_name(user_name);
+        userResponseDTO.setFollower(List.of());
+        FollowerList followerList = new FollowerList(new User(2, "user2", true), List.of());
+
+        when(iUserService.getFollowers(anyInt())).thenReturn(userResponseDTO);
+        when(userRepository.findSellerById(anyInt())).thenReturn(followerList);
+        when(userRepository.existsSellerById(anyInt())).thenReturn(true);
+
+        UserResponseDTO returned = userService.getOrderedFollowersById(id, orderBy);
+
+        assertEquals(userResponseDTO, returned);
+    }
+
+    @Test
+    @DisplayName("Obtener la lista ordenada ascendentemente de seguidos de un usuario")
+    void getAscOrderedFollowedById() {
+        id=1;
+        orderBy="name_asc";
+        user_name="user1";
+        userResponseDTO.setUser_id(id);
+        userResponseDTO.setUser_name(user_name);
+        userResponseDTO.setFollower(List.of());
+        FollowerList followerList = new FollowerList(new User(1, "user1", false),List.of());
+
+        when(iUserService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
+        when(userRepository.findClientById(anyInt())).thenReturn(followerList);
+        when(userRepository.existsClientById(anyInt())).thenReturn(true);
+
+        UserResponseDTO returned = userService.getOrderedFollowedById(id, orderBy);
+
+        assertEquals(userResponseDTO, returned);
+    }
+
+    @Test
+    @DisplayName("Obtener la lista ordenada descendentemente de seguidos de un usuario")
+    void getDescOrderedFollowedById() {
+        id=1;
+        orderBy="name_desc";
+        user_name="user1";
+        userResponseDTO.setUser_id(id);
+        userResponseDTO.setUser_name(user_name);
+        userResponseDTO.setFollower(List.of());
+        FollowerList followerList = new FollowerList(new User(1, "user1", false),List.of());
+
+        when(iUserService.getFollowedById(anyInt())).thenReturn(userResponseDTO);
+        when(userRepository.findClientById(anyInt())).thenReturn(followerList);
+        when(userRepository.existsClientById(anyInt())).thenReturn(true);
+
+        UserResponseDTO returned = userService.getOrderedFollowedById(id, orderBy);
+
+        assertEquals(userResponseDTO, returned);
+    }
+
+    @Test
+    @DisplayName("Deberia lanzar una excepcion si el orderBy no es valido al consultar seguidores")
+    void getExceptionOrderedFollowersById() {
+        id=1;
+        orderBy="qwerty";
+        user_name="user1";
+        FollowerList followerList = new FollowerList(new User(1, "user1", false),List.of());
+
+        when(userRepository.findSellerById(anyInt())).thenReturn(followerList);
+        when(userRepository.existsSellerById(anyInt())).thenReturn(true);
+
+        assertThrows(BadRequestException.class, () -> userService.getOrderedFollowersById(id, orderBy));
+    }
+
+    @Test
+    @DisplayName("Deberia lanzar una excepcion si el orderBy no es valido al consultar seguidos por un usuario")
+    void getExceptionOrderedFollowedById() {
+        id=1;
+        orderBy="qwerty";
+        user_name="user1";
+        FollowerList followerList = new FollowerList(new User(1, "user1", false),List.of());
+
+        when(userRepository.findClientById(anyInt())).thenReturn(followerList);
+        when(userRepository.existsClientById(anyInt())).thenReturn(true);
+
+        assertThrows(BadRequestException.class, () -> userService.getOrderedFollowedById(id, orderBy));
+    }
 }
