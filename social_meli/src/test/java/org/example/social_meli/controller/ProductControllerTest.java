@@ -28,9 +28,9 @@ class ProductControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("Crear un post de un producto correctamente")
+    @DisplayName("Create a post")
     void postProductPost() throws Exception {
-        PostDTO postDTO = PostDTO.builder().post_id(1012).user_id(2).date(LocalDate.now()).product(ProductDTO.builder().product_id(1).product_name("Sol solecito").type("Tipo tipo").brand("Ford").color("Azul").notes("Sol solecito").build()).category(4).price(20.00).build();
+        PostDTO postDTO = PostDTO.builder().post_id(123).user_id(2).date(LocalDate.now()).product(ProductDTO.builder().product_id(1).product_name("Sol solecito").type("Tipo tipo").brand("Ford").color("Azul").notes("Sol solecito").build()).category(4).price(20.00).build();
         mockMvc.perform(MockMvcRequestBuilders.post("/products/post").content(objectMapper.writeValueAsString(postDTO)).contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(postDTO))).andExpect(MockMvcResultMatchers.jsonPath("$.user_id").value(2));
     }
 }

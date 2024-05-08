@@ -43,7 +43,7 @@ class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post(url).contentType("application/json")).andExpect(status().isOk());
     }
     @Test
-    @DisplayName("Deberia dejar de seguir a un usuario")
+    @DisplayName("Unfollow an user")
     void postUnfollowUser() throws Exception {
         Integer userId = 1;
         Integer userIdToUnfollow = 2;
@@ -52,7 +52,6 @@ class UserControllerTest {
 
         when(userService.unfollowUser(anyInt(), anyInt())).thenReturn(new UserResponseDTO(1, "wcalderwood0", Collections.emptyList()));
 
-        // Perform the request
         mockMvc.perform(MockMvcRequestBuilders.post("/users/1/unfollow/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
