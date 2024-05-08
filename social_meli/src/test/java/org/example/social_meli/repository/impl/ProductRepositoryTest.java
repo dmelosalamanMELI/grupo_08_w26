@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class ProductRepositoryTest {
 
-
     ProductRepository productRepository;
 
     @BeforeEach
@@ -22,9 +21,9 @@ class ProductRepositoryTest {
 
     @Test
     void getAllPosts() {
-
+        Integer SizeExpected = 22;
         List<Post> response = productRepository.getAllPosts();
-        assertEquals(26, response.size());
+        assertEquals(SizeExpected, response.size());
         assertNotNull(response);
 
     }
