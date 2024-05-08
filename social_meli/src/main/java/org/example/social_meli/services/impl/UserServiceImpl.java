@@ -78,7 +78,7 @@ public class UserServiceImpl implements IUserService {
         if (!userRepository.existsSellerById(userId)) {
             throw new NotFoundException("El usuario " + userId+" no es vendedor");
         }
-        FollowerList followerList = userRepository.getFollowerByUserId(userId);
+        FollowerList followerList = userRepository.findSellerById(userId);
         if (followerList == null) {
             throw new NotFoundException("No tiene seguidores");
         }
@@ -91,8 +91,7 @@ public class UserServiceImpl implements IUserService {
         if (!userRepository.existsClientById(userId)) {
             throw new NotFoundException("No existe el usuario " + userId);
         }
-        User user = userRepository.findById(userId);
-        FollowerList followerList = userRepository.findClientByUser(user);
+        FollowerList followerList = userRepository.findClientById(userId);
         return getUserResponseDTO(followerList);
     }
 
