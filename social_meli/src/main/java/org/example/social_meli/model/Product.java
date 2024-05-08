@@ -1,12 +1,14 @@
 package org.example.social_meli.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Product {
      private Integer product_id;
      private String product_name;
