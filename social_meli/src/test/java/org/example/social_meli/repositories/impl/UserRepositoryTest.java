@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 public class UserRepositoryTest {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserRepositoryTest() throws IOException {
         userRepository = new UserRepository();
@@ -22,7 +22,7 @@ public class UserRepositoryTest {
    @Test
    @DisplayName("Trae el vendedor con el id 2")
     void findClientByIdTest(){
-        FollowerList expectedResult = new FollowerList().builder()
+        FollowerList expectedResult = FollowerList.builder()
                 .user(new User(2,"dclail1",true))
                 .follower(List.of(
                         new User( 3, "ceverett2",false),
@@ -36,7 +36,7 @@ public class UserRepositoryTest {
    @Test
    @DisplayName("Traer el cliente con el id 3")
    void  findSellerByIdTest(){
-        FollowerList expectedResult = new FollowerList().builder()
+        FollowerList expectedResult = FollowerList.builder()
                 .user(new User(3,"ceverett2",false))
                 .follower(List.of(
                         new User(2,"dclail1",true),
