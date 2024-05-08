@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.IOException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserRepositoryTest {
@@ -104,5 +107,32 @@ public class UserRepositoryTest {
         userRepository.saveSeller(followerList);
         userRepository.updateSellers(0, followerList);
         assertEquals(followerList, userRepository.findSellerById(1));
+    }
+    @Test
+    @DisplayName("Trae el vendedor con el id 2")
+    void findClientByIdTest(){
+        FollowerList expectedResult = FollowerList.builder()
+                .user(new User(2,"dclail1",true))
+                .follower(List.of(
+                        new User( 3, "ceverett2",false),
+                        new User(1,"wcalderwood0",false)
+                ))
+                .build();
+        FollowerList result= userRepository.findSellerById(2);
+
+        assertThat(result,samePropertyValuesAs(expectedResult));
+    }
+    @Test
+    @DisplayName("Traer el cliente con el id 3")
+    void  findSellerByIdTest(){
+        FollowerList expectedResult = FollowerList.builder()
+                .user(new User(3,"ceverett2",false))
+                .follower(List.of(
+                        new User(2,"dclail1",true),
+                        new User(5,"msynnott4",true)
+                ))
+                .build();
+        FollowerList result=userRepository.findClientById(3);
+        assertThat(result,samePropertyValuesAs(expectedResult));
     }
 }
