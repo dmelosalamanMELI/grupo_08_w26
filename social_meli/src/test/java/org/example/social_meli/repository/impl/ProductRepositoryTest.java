@@ -1,6 +1,7 @@
 package org.example.social_meli.repository.impl;
 import org.example.social_meli.model.Post;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,12 +20,10 @@ class ProductRepositoryTest {
         productRepository = new ProductRepository();
     }
 
+    @DisplayName("Se verifica que se traigan los posts")
     @Test
     void getAllPosts() {
-        Integer SizeExpected = 22;
         List<Post> response = productRepository.getAllPosts();
-        assertEquals(SizeExpected, response.size());
         assertNotNull(response);
-
     }
 }

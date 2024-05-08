@@ -177,12 +177,12 @@ public class ProductServiceImplTest {
     @Test
     public void getSellersPostsFollowedByUserTwoWeeksTest() {
         Integer id = 1;
-        String orderBy = "date_asc";
 
+        // Se prepara el test de mas de 2 semanas
         Product product3 = new Product(3, "product C", "Type C", "Brand C", "Blue", "note");
-        LocalDate twoWeeksAgoPlusOneDay = LocalDate.now().minusWeeks(3);
-        Post post3 = new Post(3, 2, twoWeeksAgoPlusOneDay, product3, 1, 12000.0);
-        allPosts.add(post3);
+        LocalDate threeWeeksAgoDate= LocalDate.now().minusWeeks(3);
+        Post postThreeWeeksAgo = new Post(3, 2, threeWeeksAgoDate, product3, 1, 12000.0);
+        allPosts.add(postThreeWeeksAgo);
 
         // Configuración de usuario a seguir
         UserResponseDTO userResponseDTO = new UserResponseDTO(id, "Juan", List.of(new UserDTO(2, "Pedro"), new UserDTO(3, "Andres")));
@@ -190,27 +190,26 @@ public class ProductServiceImplTest {
         when(userService.getFollowedById(1)).thenReturn(userResponseDTO);
         when(productRepository.getAllPosts()).thenReturn(allPosts);
 
-        FollowListDTO result = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
+        FollowListDTO result = productService.getSellersPostsFollowedByUser(id);
 
         // ASSERTIONS
-        assertEquals(2, result.getPost().size());
-        assertNotEquals(3, result.getPost().get(0).getPost_id());
+        assertEquals(2, result.getPost().size()); //se verifica que solo existan dos posts
+        assertNotEquals(3, result.getPost().get(0).getPost_id());// se verifica que ninguno tenga el id 3
         assertNotEquals(3, result.getPost().get(1).getPost_id());
     }
 
-    @DisplayName("Prueba para verificar el caso de un usuario sin seguidos")
+    @DisplayName("verifica el caso de un usuario sin seguidos")
     @Test
     public void getSellersPostsFollowedByUserWithoutFollowedTest() {
-        Integer id = 4;
-        String orderBy = "date_asc";
+        Integer idUserNoFolloweds = 4;
 
         // Configuración de usuario a seguir
-        UserResponseDTO userResponseDTO = new UserResponseDTO(id, "Juan", List.of());
+        UserResponseDTO userResponseDTO = new UserResponseDTO(idUserNoFolloweds, "Juan", List.of());
 
-        when(userService.getFollowedById(id)).thenReturn(userResponseDTO);
+        when(userService.getFollowedById(idUserNoFolloweds)).thenReturn(userResponseDTO);
         when(productRepository.getAllPosts()).thenReturn(allPosts);
 
-        FollowListDTO result = productService.getOrderedSellersPostsFollowedByUser(id, orderBy);
+        FollowListDTO result = productService.getSellersPostsFollowedByUser(idUserNoFolloweds);
 
         // ASSERTIONS
         assertEquals(0, result.getPost().size());
