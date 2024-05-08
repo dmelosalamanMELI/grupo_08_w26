@@ -10,4 +10,9 @@ class SocialMeliApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void main() {
+        String [] args = new String[0];
+        SocialMeliApplication.main(args);
+    }
 }

@@ -89,7 +89,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserResponseDTO getFollowedById(Integer userId) {
         if (!userRepository.existsClientById(userId)) {
-            throw new NotFoundException("No existe el usuario " + userId);
+            throw new NotFoundException("El usuario " + userId+" no es un comprador");
         }
         FollowerList followerList = userRepository.findClientById(userId);
         return getUserResponseDTO(followerList);
