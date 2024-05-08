@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements IProductService {
@@ -54,26 +55,28 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public FollowListDTO getSellersPostsFollowedByUser(Integer id) {
         UserResponseDTO followerList = userServiceImpl.getFollowedById(id);
-        List<PostDTO> postDTOList = getAllPosts();
         FollowListDTO followListDTO = new FollowListDTO();
-        if(!followerList.getFollower().isEmpty()){
-            postDTOList = followerList.getFollower().stream()
-                    .flatMap(follower -> getAllPosts().stream()
-                            .filter(post -> post.getUser_id().equals(follower.getUser_id())))
-                    .toList();
+        followListDTO.setUser_id(id);
 
+        if(followerList.getFollower().isEmpty()){
+            followListDTO.setPost(List.of());
+            return followListDTO;
         }
 
         LocalDate twoWeeksAgo = LocalDate.now().minusWeeks(2);
-        twoWeeksAgo.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        List<PostDTO> postDTOList = getAllPosts().stream()
+                .filter(post -> isPostFromFollowedUserAndWithinTwoWeeks(post, followerList, twoWeeksAgo))
+                .collect(Collectors.toList());
 
-        postDTOList = postDTOList.stream()
-                .filter(post -> post.getDate().isAfter(twoWeeksAgo)).toList();
-
-        followListDTO.setUser_id(id);
         followListDTO.setPost(postDTOList);
 
         return followListDTO;
+    }
+
+    private boolean isPostFromFollowedUserAndWithinTwoWeeks(PostDTO post, UserResponseDTO followerList, LocalDate twoWeeksAgo) {
+        return followerList.getFollower().stream()
+                .anyMatch(follower -> post.getUser_id().equals(follower.getUser_id()))
+                && post.getDate().isAfter(twoWeeksAgo);
     }
 
     @Override
