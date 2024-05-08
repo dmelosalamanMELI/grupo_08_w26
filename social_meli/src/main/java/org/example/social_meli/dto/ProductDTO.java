@@ -2,12 +2,14 @@ package org.example.social_meli.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductDTO {
     @Positive(message = "El id debe ser mayor a 0")
     @NotNull(message = "El id no puede ser vacío")
