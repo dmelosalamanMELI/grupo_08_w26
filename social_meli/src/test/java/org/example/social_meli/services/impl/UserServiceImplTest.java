@@ -1,5 +1,4 @@
 package org.example.social_meli.services.impl;
-
 import org.example.social_meli.dto.UserCountResponseDTO;
 import org.example.social_meli.dto.UserResponseDTO;
 import org.example.social_meli.exceptions.NotFoundException;
@@ -9,7 +8,6 @@ import org.example.social_meli.model.User;
 import org.example.social_meli.repository.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
