@@ -38,6 +38,7 @@ class UserServiceImplTest {
 
     @Mock
     private ObjectMapper objectMapper;
+    @Mock
     private IUserService iUserService;
 
 
@@ -84,10 +85,9 @@ class UserServiceImplTest {
         when(userRepository.existsSellerById(anyInt())).thenReturn(true);
         when(userRepository.existsClientById(anyInt())).thenReturn(true);
 
-        when(userRepository.findClientByUser(client)).thenReturn(clientFollowedList);
-        when(userRepository.getFollowerByUserId(12)).thenReturn(sellerFollowerList);
+        when(userRepository.findClientById(1)).thenReturn(clientFollowedList);
+        when(userRepository.findSellerById(12)).thenReturn(sellerFollowerList);
 
-        when(userRepository.findById(1)).thenReturn(client);
         when(objectMapper.convertValue(clientFollowedList.getFollower().get(0), UserDTO.class)).thenReturn(new UserDTO(2,"darth"));
         when(objectMapper.convertValue(clientFollowedList.getFollower().get(1), UserDTO.class)).thenReturn(new UserDTO(3,"Aseller"));
         when(objectMapper.convertValue(clientFollowedList.getFollower().get(2), UserDTO.class)).thenReturn(new UserDTO(4,"zorth"));
